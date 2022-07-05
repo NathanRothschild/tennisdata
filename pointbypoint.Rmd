@@ -1,0 +1,52 @@
+---
+title: "Point by Point Graph"
+author: "Nathan Rothschild"
+date: '2022-07-04'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(primer.data)
+library(deuce)
+library(gghighlight)
+```
+
+```{r}
+data(point_by_point)
+thedog<- point_by_point |> 
+  filter(tour == "ATP", server1 == "Alexandr Dolgopolov" & winner == 1 | server2 == "Alexandr Dolgopolov" & winner == 2, draw == "Main")
+```
+
+```{r}
+beg_thedog<- thedog |> 
+  select(server1, server2, winner, score, tny_date, W1, W2, W3, L1, L2, L3)
+```
+
+```{r}
+beg_as_int <- beg_thedog |> 
+  mutate(W1 = as.integer(beg_thedog$W1)) |> 
+  mutate(W2 = as.integer(beg_thedog$W2)) |> 
+  mutate(W3 = as.integer(beg_thedog$W3))
+```
+```{r}
+the_dog_wins<- beg_as_int |> 
+  drop_na() |> 
+  mutate(games_won = W1 + W2 + W3) |> 
+  mutate(year = format(tny_date, '%Y'))
+```
+
+```{r}
+the_dog_wins |> 
+  ggplot(mapping = aes(x = tny_date, y = games_won)) + 
+  geom_path() +
+  theme_minimal()+
+  labs(title = "Number of Games necessary for Alexandr Dologopolov to Win a Match", subtitle = "The fewest number of games he needed to win was in 2012",
+x = "",
+y = "Number of Games Won",
+caption = "Source: github.com/skoval/deuce")
+```
+
+
+
