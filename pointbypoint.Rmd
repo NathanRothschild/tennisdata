@@ -98,18 +98,19 @@ caption = "Source: github.com/skoval/deuce") +
 ```
 
 ```{r}
-colors <- c("Dolgopolov" = "darkblue", "del Potro" = "red", "Cilic" = "orange")
+colors <- c("Dolgopolov" = "darkblue", "del Potro" = "yellow", "Cilic" = "forestgreen")
 p <- ggplot() + 
   geom_path(data = the_dog_wins, mapping = aes(x = tny_date, y = games_won, color = "Dolgopolov")) + 
   geom_path(data = delpo_wins, mapping = aes(x = tny_date, y = games_won2, color = "del Potro")) + 
   geom_path(data = cilic_wins, mapping = aes(x = tny_date, y = games_won3, color = "Cilic")) + 
-  labs(title = "Number of Games Necessary for Three 33 y/o Players to Win a Match",
-       subtitle = "Some subtitle",
+  labs(title = "Number of Games Necessary for 33 y/o Players to Win a Match",
+       subtitle = "All had a significant increase in effectiveness during 2016",
        x = "",
        y = "Number of Games Won",
        caption = "Source: github.com/skoval/deuce",
-       color = "Color") + 
-  scale_color_manual(values = colors)
+       color = "Player") + 
+  scale_color_manual(values = colors)+
+  theme_minimal()
 
 p
 ```
