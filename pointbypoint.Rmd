@@ -13,40 +13,107 @@ library(deuce)
 library(gghighlight)
 ```
 
-```{r}
+```{r, start_data}
 data(point_by_point)
 thedog<- point_by_point |> 
   filter(tour == "ATP", server1 == "Alexandr Dolgopolov" & winner == 1 | server2 == "Alexandr Dolgopolov" & winner == 2, draw == "Main")
+delpo <- point_by_point |> 
+  filter(tour == "ATP", server1 == "Juan Martin del Potro" & winner == 1 | server2 == "Juan Martin del Potro" & winner == 2, draw == "Main")
+cilic <- point_by_point |> 
+  filter(tour == "ATP", server1 == "Marin Cilic" & winner == 1 | server2 == "Marin Cilic" & winner == 2, draw == "Main")
 ```
 
-```{r}
+```{r, clean_data}
 beg_thedog<- thedog |> 
+  select(server1, server2, winner, score, tny_date, W1, W2, W3, L1, L2, L3)
+beg_delpo <- delpo |> 
+  select(server1, server2, winner, score, tny_date, W1, W2, W3, L1, L2, L3)
+beg_cilic <- cilic |> 
   select(server1, server2, winner, score, tny_date, W1, W2, W3, L1, L2, L3)
 ```
 
-```{r}
+```{r, fix_data}
 beg_as_int <- beg_thedog |> 
   mutate(W1 = as.integer(beg_thedog$W1)) |> 
   mutate(W2 = as.integer(beg_thedog$W2)) |> 
   mutate(W3 = as.integer(beg_thedog$W3))
+delpo_as_int <- beg_delpo |> 
+  mutate(W1a = as.integer(beg_delpo$W1)) |> 
+  mutate(W2a = as.integer(beg_delpo$W2)) |> 
+  mutate(W3a = as.integer(beg_delpo$W3))
+cilic_as_int <- beg_cilic |> 
+  mutate(W1b = as.integer(beg_cilic$W1)) |> 
+  mutate(W2b = as.integer(beg_cilic$W2)) |> 
+  mutate(W3b = as.integer(beg_cilic$W3))
 ```
-```{r}
+```{r, get_wins}
 the_dog_wins<- beg_as_int |> 
   drop_na() |> 
   mutate(games_won = W1 + W2 + W3) |> 
   mutate(year = format(tny_date, '%Y'))
+delpo_wins <- delpo_as_int |> 
+  drop_na() |> 
+  mutate(games_won2 = W1a + W2a + W3a) |> 
+  mutate(year2 = format(tny_date, '%Y'))
+cilic_wins <- cilic_as_int |> 
+  drop_na() |> 
+  mutate(games_won3 = W1b + W2b + W3b) |> 
+  mutate(year3 = format(tny_date, '%Y'))
 ```
 
-```{r}
+```{r, plotting1}
 the_dog_wins |> 
   ggplot(mapping = aes(x = tny_date, y = games_won)) + 
   geom_path() +
   theme_minimal()+
-  labs(title = "Number of Games necessary for Alexandr Dologopolov to Win a Match", subtitle = "The fewest number of games he needed to win was in 2012",
+  labs(title = "Number of Games Necessary for Alexandr Dolgopolov to Win a Match", subtitle = "He needed to win the fewest number of games in 2012",
 x = "",
 y = "Number of Games Won",
-caption = "Source: github.com/skoval/deuce")
+caption = "Source: github.com/skoval/deuce") + 
+  geom_smooth(method = "loess", formula = y~x, se = FALSE)
 ```
+```{r}
+delpo_wins |> 
+  ggplot(mapping = aes(x = tny_date, y = games_won2)) + 
+  geom_path() +
+  theme_minimal()+
+  labs(title = "Number of Games Necessary for Juan Martin del Potro to Win a Match", subtitle = "He needed to win the fewest number of games in the middle of his career",
+x = "",
+y = "Number of Games Won",
+caption = "Source: github.com/skoval/deuce") + 
+  geom_smooth(method = "loess", formula = y~x, se = FALSE)
+  
+```
+
+```{r}
+cilic_wins |> 
+  ggplot(mapping = aes(x = tny_date, y = games_won3)) + 
+  geom_path() +
+  theme_minimal()+
+  labs(title = "Number of Games Necessary for Marin Cilic to Win a Match", subtitle = "He needed to win the fewest number of games in 2012",
+x = "",
+y = "Number of Games Won",
+caption = "Source: github.com/skoval/deuce") + 
+  geom_smooth(method = "loess", formula = y~x, se = FALSE)
+```
+
+```{r}
+colors <- c("Dolgopolov" = "darkblue", "del Potro" = "red", "Cilic" = "orange")
+p <- ggplot() + 
+  geom_path(data = the_dog_wins, mapping = aes(x = tny_date, y = games_won, color = "Dolgopolov")) + 
+  geom_path(data = delpo_wins, mapping = aes(x = tny_date, y = games_won2, color = "del Potro")) + 
+  geom_path(data = cilic_wins, mapping = aes(x = tny_date, y = games_won3, color = "Cilic")) + 
+  labs(title = "Number of Games Necessary for Three 33 y/o Players to Win a Match",
+       subtitle = "Some subtitle",
+       x = "",
+       y = "Number of Games Won",
+       caption = "Source: github.com/skoval/deuce",
+       color = "Color") + 
+  scale_color_manual(values = colors)
+
+p
+```
+
 
 
 
