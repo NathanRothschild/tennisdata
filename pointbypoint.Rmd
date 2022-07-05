@@ -98,11 +98,11 @@ caption = "Source: github.com/skoval/deuce") +
 ```
 
 ```{r}
-colors <- c("Dolgopolov" = "darkblue", "del Potro" = "yellow", "Cilic" = "forestgreen")
+colors <- c("Alexandr Dolgopolov" = "darkblue", "Juan Martin del Potro" = "yellow", "Marin Cilic" = "forestgreen")
 p <- ggplot() + 
-  geom_path(data = the_dog_wins, mapping = aes(x = tny_date, y = games_won, color = "Dolgopolov")) + 
-  geom_path(data = delpo_wins, mapping = aes(x = tny_date, y = games_won2, color = "del Potro")) + 
-  geom_path(data = cilic_wins, mapping = aes(x = tny_date, y = games_won3, color = "Cilic")) + 
+  geom_path(data = the_dog_wins, mapping = aes(x = tny_date, y = games_won, color = "Alexandr Dolgopolov")) + 
+  geom_path(data = delpo_wins, mapping = aes(x = tny_date, y = games_won2, color = "Juan Martin del Potro")) + 
+  geom_path(data = cilic_wins, mapping = aes(x = tny_date, y = games_won3, color = "Marin Cilic")) + 
   labs(title = "Number of Games Necessary for 33 y/o Players to Win a Match",
        subtitle = "All had a significant increase in effectiveness during 2016",
        x = "",
