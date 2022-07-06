@@ -65,7 +65,7 @@ cilic_wins <- cilic_as_int |>
 ```{r, plotting1}
 the_dog_graph <- the_dog_wins |> 
   ggplot(mapping = aes(x = tny_date, y = games_won)) + 
-  geom_path() +
+  geom_jitter() +
   theme_minimal()+
   labs(title = "Number of Games Necessary for Alexandr Dolgopolov to Win a Match", subtitle = "He needed to win the fewest number of games in 2012",
 x = "",
@@ -78,7 +78,7 @@ plotly::ggplotly(the_dog_graph)
 ```{r}
 delpo_graph<- delpo_wins |> 
   ggplot(mapping = aes(x = tny_date, y = games_won2)) + 
-  geom_path() +
+  geom_jitter() +
   theme_minimal()+
   labs(title = "Number of Games Necessary for Juan Martin del Potro to Win a Match", subtitle = "He needed to win the fewest number of games in the middle of his career",
 x = "",
@@ -89,10 +89,10 @@ caption = "Source: github.com/skoval/deuce") +
 plotly::ggplotly(delpo_graph)
 ```
 
-```{r}
+```{r, plotting2}
 cilic_graph <- cilic_wins |> 
   ggplot(mapping = aes(x = tny_date, y = games_won3)) + 
-  geom_path() +
+  geom_jitter() +
   theme_minimal()+
   labs(title = "Number of Games Necessary for Marin Cilic to Win a Match", subtitle = "He needed to win the fewest number of games in 2012",
 x = "",
@@ -103,12 +103,15 @@ caption = "Source: github.com/skoval/deuce") +
 plotly::ggplotly(cilic_graph)
 ```
 
-```{r}
-colors <- c("Alexandr Dolgopolov" = "darkblue", "Juan Martin del Potro" = "yellow", "Marin Cilic" = "forestgreen")
+```{r, plotting3}
+colors <- c("Alexandr Dolgopolov" = "darkblue", "Juan Martin del Potro" = "skyblue", "Marin Cilic" = "forestgreen")
 p <- ggplot() + 
-  geom_path(data = the_dog_wins, mapping = aes(x = tny_date, y = games_won, color = "Alexandr Dolgopolov")) + 
-  geom_path(data = delpo_wins, mapping = aes(x = tny_date, y = games_won2, color = "Juan Martin del Potro")) + 
-  geom_path(data = cilic_wins, mapping = aes(x = tny_date, y = games_won3, color = "Marin Cilic")) + 
+  geom_jitter(data = the_dog_wins, mapping = aes(x = tny_date, y = games_won, color = "Alexandr Dolgopolov")) + 
+  geom_smooth(data = the_dog_wins, mapping = aes(x = tny_date, y = games_won, color = "Alexandr Dolgopolov"), method = "loess", formula = y~x, se = FALSE) +
+  geom_jitter(data = delpo_wins, mapping = aes(x = tny_date, y = games_won2, color = "Juan Martin del Potro")) + 
+  geom_smooth(data = delpo_wins, mapping = aes(x = tny_date, y = games_won2, color = "Juan Martin del Potro"), method = "loess", formula = y~x, se = FALSE) +
+  geom_jitter(data = cilic_wins, mapping = aes(x = tny_date, y = games_won3, color = "Marin Cilic")) + 
+  geom_smooth(data = cilic_wins, mapping = aes(x = tny_date, y = games_won3, color = "Marin Cilic"), method = "loess", formula = y~x, se = FALSE) +
   labs(title = "Number of Games Necessary for 33 y/o Players to Win a Match",
        subtitle = "All had a significant increase in effectiveness during 2016",
        x = "",
