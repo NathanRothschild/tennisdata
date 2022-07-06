@@ -11,6 +11,7 @@ library(tidyverse)
 library(primer.data)
 library(deuce)
 library(gghighlight)
+library(plotly)
 ```
 
 ```{r, start_data}
@@ -62,7 +63,7 @@ cilic_wins <- cilic_as_int |>
 ```
 
 ```{r, plotting1}
-the_dog_wins |> 
+the_dog_graph <- the_dog_wins |> 
   ggplot(mapping = aes(x = tny_date, y = games_won)) + 
   geom_path() +
   theme_minimal()+
@@ -71,9 +72,11 @@ x = "",
 y = "Number of Games Won",
 caption = "Source: github.com/skoval/deuce") + 
   geom_smooth(method = "loess", formula = y~x, se = FALSE)
+
+plotly::ggplotly(the_dog_graph)
 ```
 ```{r}
-delpo_wins |> 
+delpo_graph<- delpo_wins |> 
   ggplot(mapping = aes(x = tny_date, y = games_won2)) + 
   geom_path() +
   theme_minimal()+
@@ -83,10 +86,11 @@ y = "Number of Games Won",
 caption = "Source: github.com/skoval/deuce") + 
   geom_smooth(method = "loess", formula = y~x, se = FALSE)
   
+plotly::ggplotly(delpo_graph)
 ```
 
 ```{r}
-cilic_wins |> 
+cilic_graph <- cilic_wins |> 
   ggplot(mapping = aes(x = tny_date, y = games_won3)) + 
   geom_path() +
   theme_minimal()+
@@ -95,6 +99,8 @@ x = "",
 y = "Number of Games Won",
 caption = "Source: github.com/skoval/deuce") + 
   geom_smooth(method = "loess", formula = y~x, se = FALSE)
+
+plotly::ggplotly(cilic_graph)
 ```
 
 ```{r}
@@ -112,7 +118,7 @@ p <- ggplot() +
   scale_color_manual(values = colors)+
   theme_minimal()
 
-p
+plotly::ggplotly(p)
 ```
 
 
